@@ -387,9 +387,7 @@ def user_signup(conn, role):
         password = st.text_input("Password", type="password")
 
         if st.button("Register as Doctor"):
-            create_user(username, password, "dokter", conn, 
-                        hospital_name=hospital_name, hospital_address=hospital_address, 
-                        hospital_contact=hospital_contact, doctor_name=doctor_name, doctor_sip=doctor_sip)
+            create_user(conn, username, password, "dokter", hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip)
             st.success("Doctor registered successfully!")
 
     elif role == "pasien":
