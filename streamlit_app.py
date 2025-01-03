@@ -5,15 +5,11 @@ from datetime import datetime
 import pytz
 import os
 
-def create_database():
-    db_name = "pharmily.db"
-    if not os.path.exists(db_name):
-        conn = sqlite3.connect(db_name)
-        create_tables(conn)
-        conn.close()
-        print(f"Database {db_name} dan tabel telah dibuat.")
-    else:
-        print(f"Database {db_name} sudah ada.")
+# Membuat koneksi ke database
+conn = sqlite3.connect('pharmily.db')
+
+# Membuat cursor untuk menjalankan query
+cursor = conn.cursor()
 
 def create_tables(conn):
     cursor = conn.cursor()
@@ -62,37 +58,23 @@ def create_tables(conn):
     conn.commit()
 
 
-# Jalankan fungsi untuk membuat database baru
-if __name__ == "__main__":
-    create_database()
-
-# Fungsi untuk memasukkan data pengguna (dokter, pasien, apotek)
-def create_user(conn, username, password, role, hospital_name=None, hospital_address=None, hospital_contact=None, 
+def create_user(username, password, role, hospital_name=None, hospital_address=None, hospital_contact=None, 
                 doctor_name=None, doctor_sip=None, patient_name=None, patient_age=None, 
                 patient_gender=None, patient_address=None):
+    conn = sqlite3.connect("pharmily.db")
     cursor = conn.cursor()
-
-    # Menyusun data untuk pengguna berdasarkan role
-    if role == "dokter":
-        cursor.execute(''' 
-        INSERT INTO Users (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip))
-        
-    elif role == "pasien":
-        cursor.execute(''' 
-        INSERT INTO Users (username, password, role, patient_name, patient_age, patient_gender, patient_address) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (username, password, role, patient_name, patient_age, patient_gender, patient_address))
-        
-    elif role == "apotek":
-        cursor.execute(''' 
-        INSERT INTO Users (username, password, role) 
-        VALUES (?, ?, ?)
-        ''', (username, password, role))
-
-    conn.commit()
-    return cursor.lastrowid
+    if role == 'dokter':
+        cursor.execute('''INSERT INTO Users (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?)''', 
+                       (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip))
+    elif role == 'apotek':
+        cursor.execute('''INSERT INTO Users (username, password, role) VALUES (?, ?, ?)''', (username, password, role))
+    elif role == 'pasien':
+        cursor.execute('''INSERT INTO Users (username, password, role, patient_name, patient_age, patient_gender, patient_address)
+                          VALUES (?, ?, ?, ?, ?, ?, ?)''',
+                       (username, password, role, patient_name, patient_age, patient_gender, patient_address))
+    conn.commit()  # Pastikan perubahan disimpan
+    print(f"User {username} dengan role {role} berhasil dibuat.")
 
 
 # Fungsi untuk membuat nomor antrian berdasarkan jumlah pasien saat ini
@@ -467,7 +449,11 @@ def user_login(conn):
             return None
         
 def main():
-    create_database()  # Memastikan database dan tabel sudah ada sebelum koneksi dibuat
+    # Membuat koneksi ke database
+    conn = sqlite3.connect('database.db')
+
+# Membuat cursor untuk menjalankan query
+    cursor = conn.cursor()
 
     st.title("Pharmily")
     menu = st.sidebar.radio("Pilih Opsi", ["Sign Up", "Login", "Keluar"])
