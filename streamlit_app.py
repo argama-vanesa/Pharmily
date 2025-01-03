@@ -459,6 +459,7 @@ def main():
     conn = sqlite3.connect("pharmily.db")
     # Memastikan tabel-tabel yang diperlukan ada
     create_tables(conn)
+    cursor = conn.cursor()
 
     st.title("Pharmily")
     menu = st.sidebar.radio("Pilih Opsi", ["Sign Up", "Login", "Keluar"])
