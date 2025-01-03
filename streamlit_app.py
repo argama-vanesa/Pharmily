@@ -4,7 +4,7 @@ from fpdf import FPDF
 from datetime import datetime
 import pytz
 import os
-from backend import create_tables, create_user, generate_queue_number, add_queue_number, input_prescriptions
+from backend import create_database, create_tables, create_user, generate_queue_number, add_queue_number, input_prescriptions
 from backend import DoctorPrescriptionPDF 
 
 def pilih_rumah_sakit_dan_dokter(conn, patient_id):
@@ -273,10 +273,10 @@ def user_login(conn):
             return None
 
 def main():
-    conn = sqlite3.connect("pharmily.db")  # Use create_connection function here
+    create_database()  # Memastikan database dan tabel sudah ada sebelum koneksi dibuat
+    conn = sqlite3.connect("pharmily.db")  # Koneksi ke database
 
     st.title("Pharmily")
-
     menu = st.sidebar.radio("Pilih Opsi", ["Sign Up", "Login", "Keluar"])
 
     if menu == "Sign Up":
