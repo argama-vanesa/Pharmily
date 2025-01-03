@@ -4,7 +4,7 @@ from fpdf import FPDF
 from datetime import datetime
 import pytz
 import os
-from backend import create_user, generate_queue_number, add_queue_number, input_prescriptions
+from backend import create_tables, create_user, generate_queue_number, add_queue_number, input_prescriptions
 from backend import DoctorPrescriptionPDF 
 
 def pilih_rumah_sakit_dan_dokter(conn, patient_id):
