@@ -72,16 +72,28 @@ def create_user(conn, username, password, role, hospital_name=None, hospital_add
                 patient_gender=None, patient_address=None):
     cursor = conn.cursor()
 
-    # Menyusun data untuk pengguna
-    cursor.execute(''' 
-    INSERT INTO Users (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip, 
-                       patient_name, patient_age, patient_gender, patient_address)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip, 
-          patient_name, patient_age, patient_gender, patient_address))
+    # Menyusun data untuk pengguna berdasarkan role
+    if role == "dokter":
+        cursor.execute(''' 
+        INSERT INTO Users (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip))
+        
+    elif role == "pasien":
+        cursor.execute(''' 
+        INSERT INTO Users (username, password, role, patient_name, patient_age, patient_gender, patient_address) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (username, password, role, patient_name, patient_age, patient_gender, patient_address))
+        
+    elif role == "apotek":
+        cursor.execute(''' 
+        INSERT INTO Users (username, password, role) 
+        VALUES (?, ?, ?)
+        ''', (username, password, role))
 
     conn.commit()
     return cursor.lastrowid
+
 
 # Fungsi untuk membuat nomor antrian berdasarkan jumlah pasien saat ini
 def generate_queue_number(conn, doctor_id):
