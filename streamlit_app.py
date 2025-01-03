@@ -276,7 +276,7 @@ sqlite3.connect("pharmily.db")
 def main():
     conn = sqlite3.connect("pharmily.db")  # Use create_connection function here
 
-    st.title("Aplikasi Manajemen Resep")
+    st.title("Pharmily")
 
     menu = st.sidebar.radio("Pilih Opsi", ["Sign Up", "Login", "Keluar"])
 
