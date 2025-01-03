@@ -419,12 +419,12 @@ def user_signup(conn, role):
     else:
         st.error("Invalid role!")
 
-# Fungsi untuk autentikasi pengguna (login)
 def authenticate_user(conn, username, password, role):
     conn = sqlite3.connect("pharmily.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT * FROM Users WHERE username = ? AND password = ? AND role = ?''', (username, password, role))
     user = cursor.fetchone()
+    print(f"Authenticating user: {username}, Role: {role}, Found: {user is not None}")
     return user
 
 # Fungsi login pengguna
