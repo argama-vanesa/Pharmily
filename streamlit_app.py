@@ -83,7 +83,7 @@ def generate_queue_number(conn, doctor_id):
 
 def add_queue_number(conn, patient_id, doctor_id):
     conn = sqlite3.connect("pharmily.db")
-    cursor = conn.cursor()cursor = conn.cursor()
+    cursor = conn.cursor()
     queue_number = generate_queue_number(conn, doctor_id)
     created_at = datetime.now(pytz.timezone('Asia/Jakarta')).strftime('%Y-%m-%d %H:%M:%S')
 
