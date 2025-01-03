@@ -5,12 +5,6 @@ from datetime import datetime
 import pytz
 import os
 
-# Membuat koneksi ke database
-conn = sqlite3.connect('pharmily.db')
-
-# Membuat cursor untuk menjalankan query
-cursor = conn.cursor()
-
 def create_tables(conn):
     cursor = conn.cursor()
     # Membuat tabel Users
@@ -457,9 +451,9 @@ def user_login(conn):
         
 def main():
     conn = sqlite3.connect("pharmily.db")
+    cursor = conn.cursor()
     # Memastikan tabel-tabel yang diperlukan ada
     create_tables(conn)
-    cursor = conn.cursor()
 
     st.title("Pharmily")
     menu = st.sidebar.radio("Pilih Opsi", ["Sign Up", "Login", "Keluar"])
