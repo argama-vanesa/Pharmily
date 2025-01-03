@@ -466,12 +466,6 @@ def user_login(conn):
             st.error("Login failed. Check your credentials.")
             return None
         
-# Example usage
-conn = sqlite3.connect("pharmily.db")
-if check_table_exists(conn, 'Users'):
-    print("Users table exists")
-else:
-    print("Users table does not exist")
 def main():
     create_database()  # Memastikan database dan tabel sudah ada sebelum koneksi dibuat
     conn = sqlite3.connect("pharmily.db")  # Koneksi ke database
