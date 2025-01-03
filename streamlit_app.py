@@ -58,9 +58,10 @@ def create_tables(conn):
     conn.commit()
 
 
-def create_user(username, password, role, conn, hospital_name=None, hospital_address=None, hospital_contact=None, 
+def create_user(username, password, role, hospital_name=None, hospital_address=None, hospital_contact=None, 
                 doctor_name=None, doctor_sip=None, patient_name=None, patient_age=None, 
                 patient_gender=None, patient_address=None):
+    conn = sqlite3.connect("pharmily.db")
     cursor = conn.cursor()
     if role == 'dokter':
         cursor.execute('''INSERT INTO Users (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip)
