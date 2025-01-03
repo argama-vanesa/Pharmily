@@ -443,7 +443,6 @@ def user_login(conn):
         
 def main():
     conn = sqlite3.connect("pharmily.db")
-    cursor = conn.cursor()
     # Memastikan tabel-tabel yang diperlukan ada
     create_tables(conn)
 
