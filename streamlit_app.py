@@ -55,13 +55,6 @@ def create_tables(conn):
 def create_user(username, password, role, conn, hospital_name=None, hospital_address=None, hospital_contact=None, 
                 doctor_name=None, doctor_sip=None, patient_name=None, patient_age=None, 
                 patient_gender=None, patient_address=None):
-    cursor = conn.cursor()
-
-    # Debugging: Cek apakah tabel Users ada
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='Users';")
-    if cursor.fetchone() is None:
-        print("Tabel 'Users' tidak ada!")
-        return
 
     if role == 'dokter':
         cursor.execute('''INSERT INTO Users (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip)
