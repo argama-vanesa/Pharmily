@@ -452,9 +452,6 @@ def main():
     # Membuat koneksi ke database
     conn = sqlite3.connect('database.db')
 
-# Membuat cursor untuk menjalankan query
-    cursor = conn.cursor()
-
     st.title("Pharmily")
     menu = st.sidebar.radio("Pilih Opsi", ["Sign Up", "Login", "Keluar"])
 
