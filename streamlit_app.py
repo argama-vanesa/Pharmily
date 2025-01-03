@@ -52,37 +52,35 @@ def create_tables(conn):
     conn.commit()
 
 
-def create_user(username, password, role, conn, hospital_name=None, hospital_address=None, hospital_contact=None, 
+# Fungsi untuk memasukkan data pengguna (dokter, pasien, apotek)
+def create_user(conn, username, password, role, hospital_name=None, hospital_address=None, hospital_contact=None, 
                 doctor_name=None, doctor_sip=None, patient_name=None, patient_age=None, 
                 patient_gender=None, patient_address=None):
-    # Membuat koneksi ke database
-    conn = sqlite3.connect("pharmily.db")
     cursor = conn.cursor()
 
-    if role == 'dokter':
-        cursor.execute('''INSERT INTO Users (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip)
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?)''', 
-                       (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip))
-    elif role == 'apotek':
-        cursor.execute('''INSERT INTO Users (username, password, role) VALUES (?, ?, ?)''', (username, password, role))
-    elif role == 'pasien':
-        cursor.execute('''INSERT INTO Users (username, password, role, patient_name, patient_age, patient_gender, patient_address)
-                          VALUES (?, ?, ?, ?, ?, ?, ?)''',
-                       (username, password, role, patient_name, patient_age, patient_gender, patient_address))
+    # Menyusun data untuk pengguna
+    cursor.execute(''' 
+    INSERT INTO Users (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip, 
+                       patient_name, patient_age, patient_gender, patient_address)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (username, password, role, hospital_name, hospital_address, hospital_contact, doctor_name, doctor_sip, 
+          patient_name, patient_age, patient_gender, patient_address))
 
-    conn.commit()  # Pastikan perubahan disimpan
-    print(f"User {username} dengan role {role} berhasil dibuat.")
+    conn.commit()
+
+    # Return the ID of the newly inserted row
+    return cursor.lastrowid
 
 
 # Fungsi untuk membuat nomor antrian berdasarkan jumlah pasien saat ini
 def generate_queue_number(conn, doctor_id):
     cursor = conn.cursor()
+    # Ensure that the SQL query is correctly formatted
     cursor.execute('''SELECT COUNT(*) FROM QueueNumber WHERE doctor_id = ?''', (doctor_id,))
     count = cursor.fetchone()[0]
     return f"{doctor_id}-{count + 1:02d}"
 
 def add_queue_number(conn, patient_id, doctor_id):
-    conn = sqlite3.connect("pharmily.db")
     cursor = conn.cursor()
     queue_number = generate_queue_number(conn, doctor_id)
     created_at = datetime.now(pytz.timezone('Asia/Jakarta')).strftime('%Y-%m-%d %H:%M:%S')
