@@ -82,7 +82,8 @@ def generate_queue_number(conn, doctor_id):
     return f"{doctor_id}-{count + 1:02d}"
 
 def add_queue_number(conn, patient_id, doctor_id):
-    cursor = conn.cursor()
+    conn = sqlite3.connect("pharmily.db")
+    cursor = conn.cursor()cursor = conn.cursor()
     queue_number = generate_queue_number(conn, doctor_id)
     created_at = datetime.now(pytz.timezone('Asia/Jakarta')).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -176,10 +177,6 @@ def input_prescriptions():
         })
     return prescriptions
 
-def check_table_exists(conn, table_name):
-    cursor = conn.cursor()
-    cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
-    return cursor.fetchone() is not None
 def pilih_rumah_sakit_dan_dokter(conn, patient_id):
     cursor = conn.cursor()
 
@@ -424,6 +421,7 @@ def user_signup(conn, role):
 
 # Fungsi untuk autentikasi pengguna (login)
 def authenticate_user(conn, username, password, role):
+    conn = sqlite3.connect("pharmily.db")
     cursor = conn.cursor()
     cursor.execute('''SELECT * FROM Users WHERE username = ? AND password = ? AND role = ?''', (username, password, role))
     user = cursor.fetchone()
