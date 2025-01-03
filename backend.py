@@ -156,52 +156,6 @@ class DoctorPrescriptionPDF(FPDF):
         self.cell(0, 10, f'{hospital_name} - {doctor_name}', 0, 0, 'C')
 
 
-# Fungsi untuk mengambil data dokter dan rumah sakit berdasarkan nama dokter
-def get_hospital_info_by_doctor(conn, doctor_name):
-    cursor = conn.cursor()
-    cursor.execute('''
-      SELECT doctor_name, doctor_sip, hospital_address, hospital_contact, hospital_name
-      FROM Users
-      WHERE id = ? AND role = 'dokter'
-    ''', (doctor_id,))
-    hospital_info = cursor.fetchone()
-
-    if hospital_info:
-        return {
-            'doctor_name': hospital_info[0],
-            'doctor_sip': hospital_info[1],
-            'address': hospital_info[2],
-            'contact': hospital_info[3],
-            'hospital_name': hospital_info[4]
-        }
-    else:
-        print("Dokter tidak ditemukan.")
-        return None
-
-
-# Fungsi untuk mengambil data pasien berdasarkan nomor antrian
-def get_patient_info_by_queue_number(conn, queue_number):
-    cursor = conn.cursor()
-    cursor.execute('''
-        SELECT U.patient_name, U.patient_age, U.patient_gender, U.patient_address
-        FROM Users U
-        INNER JOIN QueueNumber Q ON U.id = Q.patient_id
-        WHERE Q.queue_number = ?
-    ''', (queue_number,))
-    patient_info = cursor.fetchone()
-
-    if patient_info:
-        return {
-            'patient_name': patient_info[0],
-            'patient_age': patient_info[1],
-            'patient_gender': patient_info[2],
-            'patient_address': patient_info[3]
-        }
-    else:
-        print("Pasien tidak ditemukan.")
-        return None
-
-
 # Fungsi input data resep
 def input_prescriptions():
     prescriptions = []
