@@ -272,7 +272,6 @@ def user_login(conn):
             st.error("Login failed. Check your credentials.")
             return None
 
-sqlite3.connect("pharmily.db")
 def main():
     conn = sqlite3.connect("pharmily.db")  # Use create_connection function here
 

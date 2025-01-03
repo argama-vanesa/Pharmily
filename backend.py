@@ -6,8 +6,14 @@ import os
 
 
 def create_database():
-    # Nama file database baru
     db_name = "pharmily.db"
+    if not os.path.exists(db_name):
+        conn = sqlite3.connect(db_name)
+        create_tables(conn)
+        conn.close()
+        print(f"Database {db_name} dan tabel telah dibuat.")
+    else:
+        print(f"Database {db_name} sudah ada.")
 
 def create_tables(conn):
     cursor = conn.cursor()
