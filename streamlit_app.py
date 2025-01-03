@@ -449,8 +449,11 @@ def user_login(conn):
             return None
         
 def main():
-    # Membuat koneksi ke database
-    conn = sqlite3.connect('database.db')
+    # Membuka koneksi ke database
+    conn = sqlite3.connect("pharmily.db")
+
+    # Memastikan tabel-tabel yang diperlukan ada
+    create_tables(conn)
 
     st.title("Pharmily")
     menu = st.sidebar.radio("Pilih Opsi", ["Sign Up", "Login", "Keluar"])
